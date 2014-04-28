@@ -116,18 +116,48 @@ var SlotList = React.createClass({
     }
 });
 
+var LogResponse = function(msg, data) {
+    console.log(msg);
+    console.debug(data);
+}
+
+var GameApiRequests = {
+    createGame: function(callback) {
+        $.get('/game/create', function(data) {
+            LogResponse('Create game', data);
+
+            var id = data.result;
+            callback(id);
+        });
+    },
+    listCards: function(id, callback) {
+        $.get('/game/' + id + '/list/', function (data) {
+            LogResponse('List cards', data);
+
+            var slots = data.slots;
+            callback(slots);
+        });
+    }
+};
+
 var Game = React.createClass({
     getInitialState: function() {
-        return {slots: [{id: 'succ', term: 'λ x. x + 1', value: 100}]};
+        return {playerSlots: [], enemySlots: []};
     },
     componentDidMount: function() {
-        $.get('/game/535e8b8aa2cc653a27e02b6f/list/', function(data) { this.setState({slots: data.slots});}.bind(this));
+        GameApiRequests.createGame(this.createGame);
+    },
+    createGame: function(gameId) {
+        GameApiRequests.listCards(gameId, this.updateSlots);
+    },
+    updateSlots: function(slots) {
+        this.setState({playerSlots: slots, enemySlots: slots})
     },
     render: function() {
         return (
             <div>
-                <div className="player"><SlotList isPlayer={true} slots={this.state.slots} cards={this.props.cards} /></div>
-                <div className="enemy"><SlotList isPlayer={false} slots={this.state.slots} cards={this.props.cards} /></div>
+                <div className="player"><SlotList isPlayer={true} slots={this.state.playerSlots} cards={this.props.cards} /></div>
+                <div className="enemy"><SlotList isPlayer={false} slots={this.state.enemySlots} cards={this.props.cards} /></div>
             </div>
         );
     }
