@@ -26,6 +26,7 @@ def game_request(func):
             request.proponent_id = user_id
             request.opponent_id = game.second_user_id if is_first_user else game.first_user_id
             request.my_slots = request.slots.filter(user_id=user_id)
+            request.opponent_slots = request.slots.filter(user_id=request.opponent_id)
 
         del kwargs['game_id']
 
@@ -76,6 +77,7 @@ CARDS = {
     'dbl': Dbl,
     'get': Get,
     'inc': Inc,
+    'dec': Dec,
 }
 
 @ajax_request

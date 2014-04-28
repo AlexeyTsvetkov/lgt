@@ -87,12 +87,14 @@ class Succ(BuiltinFunction):
     def get_await_args(self):
         return "i",
 
+
 class Dbl(BuiltinFunction):
     def get_name(self):
         return "dbl"
 
     def get_await_args(self):
         return "i",
+
 
 class Get(BuiltinFunction):
     def get_name(self):
@@ -101,6 +103,7 @@ class Get(BuiltinFunction):
     def get_await_args(self):
         return "i",
 
+
 class Inc(BuiltinFunction):
     def get_name(self):
         return "inc"
@@ -108,6 +111,12 @@ class Inc(BuiltinFunction):
     def get_await_args(self):
         return "i",
 
+class Dec(BuiltinFunction):
+    def get_name(self):
+        return "dec"
+
+    def get_await_args(self):
+        return "i",
 
 class Application(Term):
     first_term = EmbeddedDocumentField(Term)
@@ -166,6 +175,17 @@ def handle_ready_builtin(fn, request):
         slot = get_my_slot(request, slot_id)
 
         slot.value += 1
+        slot.save()
+
+        return create_identity()
+
+    if isinstance(fn, Dec):
+        check_if_nat(fn.applied_args[0])
+        slot_id = fn.applied_args[0].value
+
+        slot = get_slot(request.opponent_slots, slot_id)
+
+        slot.value -= 1
         slot.save()
 
         return create_identity()
