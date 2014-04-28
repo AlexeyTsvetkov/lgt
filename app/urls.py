@@ -8,7 +8,7 @@ import app.settings as settings
 urlpatterns = patterns('',
     (r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'app/login.html'}),
     url(r'game/', include('games.urls')),
-
+    url(r'app/', include('frontend.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )
 
