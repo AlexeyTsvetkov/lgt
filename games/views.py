@@ -47,7 +47,7 @@ def create_game(request):
 
     game.accept_opponent(2)
 
-    return {'result': '1'}
+    return {'result': str(game.id)}
 
 @ajax_request
 @login_required

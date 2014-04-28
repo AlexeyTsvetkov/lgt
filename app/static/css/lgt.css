@@ -12,29 +12,29 @@ body {
 
 /* ================ PLAYER ============== */
 
-#player {
+.player {
     float: left;
     width: 49%;
 }
 
-#player th, #player tr  {
+.player th, .player tr  {
     text-align: left;
 }
 
 /* ================ ENEMY ============== */
 
-#enemy {
+.enemy {
     float: right;
     width: 49%;
 }
 
-#enemy .game-table {
+.enemy .game-table {
     float: right;
 }
 
-#enemy th,
-#enemy tr,
-#enemy p,
-#enemy h2 {
+.enemy th,
+.enemy tr,
+.enemy p,
+.enemy h2 {
     text-align: right;
 }

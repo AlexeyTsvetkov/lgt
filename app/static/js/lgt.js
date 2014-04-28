@@ -43,9 +43,9 @@ var CardChoice = React.createClass({
 var Slot = React.createClass({
     render: function() {
         var values = [
-            <Par text={this.props.card.name}/>,
-            <Par text={this.props.card.text}/>,
-            <Par text={this.props.health}/>
+            <Par text={this.props.slot.id}/>,
+            <Par text={this.props.slot.term}/>,
+            <Par text={this.props.slot.value}/>
         ];
         return (<Row values={values}/>);
     }
@@ -55,9 +55,9 @@ var SlotWithCards = React.createClass({
     render: function() {
         var values = [
             <CardChoice type='left' slot={this.props.key} cards={this.props.cards} />,
-            <Par text={this.props.card.name}/>,
-            <Par text={this.props.card.text}/>,
-            <Par text={this.props.health}/>,
+            <Par text={this.props.slot.id}/>,
+            <Par text={this.props.slot.term}/>,
+            <Par text={this.props.slot.value}/>,
             <CardChoice type='right' slot={this.props.key} cards={this.props.cards} />,
         ];
         return (<Row values={values}/>);
@@ -87,9 +87,9 @@ var SlotList = React.createClass({
         this.props.slots.forEach(function(slot) {
             var key = i++;
             if (isPlayer) {
-                rows.push(<SlotWithCards card={slot.card} health={slot.health} cards={cards} key={key} />);
+                rows.push(<SlotWithCards slot={slot} cards={cards} key={key} />);
             } else {
-                rows.push(<Slot card={slot.card} health={slot.health} key={key} />);
+                rows.push(<Slot slot={slot} key={key} />);
             }
         });
 
@@ -116,19 +116,30 @@ var SlotList = React.createClass({
     }
 });
 
+var Game = React.createClass({
+    getInitialState: function() {
+        return {slots: [{id: 'succ', term: 'λ x. x + 1', value: 100}]};
+    },
+    componentDidMount: function() {
+        $.get('/game/535e8b8aa2cc653a27e02b6f/list/', function(data) { this.setState({slots: data.slots});}.bind(this));
+    },
+    render: function() {
+        return (
+            <div>
+                <div className="player"><SlotList isPlayer={true} slots={this.state.slots} cards={this.props.cards} /></div>
+                <div className="enemy"><SlotList isPlayer={false} slots={this.state.slots} cards={this.props.cards} /></div>
+            </div>
+        );
+    }
+});
+
 var CARDS =
     [
-        {name: 'succ', text: 'λ x. x + 1'},
-        {name: 'zero', text: 'λ. 0'},
-        {name: 'id',   text: 'λ x. x'}
+        {name: 'succ', term: 'λ x. x + 1'},
+        {name: 'zero', term: 'λ. 0'},
+        {name: 'id',   term: 'λ x. x'}
     ];
 
-var SLOTS = [];
+React.renderComponent(<Game cards={CARDS} />, document.getElementById('game'));
 
-var ID_CARD = _.find(CARDS, function(c) { return c.name === 'id'; });
-for (var i = 0; i < 10; i++) {
-    SLOTS.push({ card: ID_CARD, health: 10000 });
-}
 
-React.renderComponent(<SlotList isPlayer={true} slots={SLOTS} cards={CARDS} />, document.getElementById('player'));
-React.renderComponent(<SlotList isPlayer={false} slots={SLOTS} cards={CARDS} />, document.getElementById('enemy'));
