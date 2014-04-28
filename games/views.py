@@ -70,28 +70,38 @@ CARDS = {
 def available_cards(request):
     return {'cards': CARDS.keys()}
 
+def game_assert(expr, message="Error"):
+    if not expr:
+        raise GameException(message)
+
 @ajax_request
 @login_required
 @game_request
 def apply_slot(request, slot_id, card, from_right):
-
-    slot = request.my_slots.filter(slot_id=slot_id)[0]
-
-    term = CARDS[card]()
-
-    if int(from_right) == 1:
-        application = Application(first_term=slot.term, second_term=term)
-    else:
-        application = Application(second_term=slot.term, first_term=term)
-
     try:
+        game_assert(request.game.is_active(), "Game is not active")
+        game_assert(request.game.is_user_turn(request.user.id), "It's not your turn")
+
+        slot = request.my_slots.filter(slot_id=slot_id)[0]
+
+        game_assert(slot.is_alive(), "Slot is not active")
+
+        term = CARDS[card]()
+
+        if int(from_right) == 1:
+            application = Application(first_term=slot.term, second_term=term)
+        else:
+            application = Application(second_term=slot.term, first_term=term)
+
         new_slot_term = make_reduction(application, request)
-    except ReductionException as e:
+    except Exception as e:
         return {'error': str(e)}
 
     slot.term = new_slot_term
-
     slot.save()
+
+    request.game.flip_turn()
+    request.game.save()
 
     return {'data': request.game.as_dict(request.user.id)}
 
@@ -113,14 +123,13 @@ def new_game(request):
         return HttpResponseRedirect(reverse('games.views.wait_opponent', kwargs={'game_id': game.id}))
     else:
         game.accept_opponent(request.user.id)
-        return HttpResponseRedirect(reverse('games.views.slots', kwargs={'game_id': game.id}))
+        return HttpResponseRedirect(reverse('games.views.game_state', kwargs={'game_id': game.id}))
 
 
 @login_required
 def wait_opponent(request, game_id):
     game = Game.objects(id=game_id)[0]
     if game.second_user_id is None:
-
         return HttpResponse("wait")
     else:
-        return HttpResponseRedirect(reverse('games.views.slots', kwargs={'game_id': game.id}))
+        return HttpResponseRedirect(reverse('games.views.game_state', kwargs={'game_id': game.id}))

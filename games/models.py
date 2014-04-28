@@ -133,18 +133,18 @@ class Application(Term):
 
 
 #########################
-class ReductionException(Exception):
+class GameException(Exception):
     pass
 
 def check_if_nat(term, message="Nat expected"):
     if not isinstance(term, Nat):
-        raise ReductionException(message)
+        raise GameException(message)
 
 def get_slot(queryset, slot_id):
     try:
         return queryset.filter(slot_id=slot_id)[0]
     except:
-        raise ReductionException("slot " + str(slot_id) + "not found")
+        raise GameException("slot " + str(slot_id) + "not found")
 
 def get_my_slot(request, slot_id):
     return get_slot(request.my_slots, slot_id)
@@ -190,7 +190,7 @@ def handle_ready_builtin(fn, request):
 
         return create_identity()
 
-    raise ReductionException("Unknown builtin type: " + str(fn.__class__))
+    raise GameException("Unknown builtin type: " + str(fn.__class__))
 
 #########################
 
@@ -241,7 +241,7 @@ def make_reduction(term, request):
         first = term.first_term
 
         if not first.is_applicable():
-            raise ReductionException(str(first) + " is not applicable")
+            raise GameException(str(first) + " is not applicable")
 
         second = term.second_term
 
@@ -328,6 +328,7 @@ class Game(Document):
     winner = IntField()
 
     state = IntField(default=GAME_STATE_AWAITING)
+    is_first_turn = BooleanField(default=True)
 
     first_slots = ListField(ReferenceField(Slot))
     second_slots = ListField(ReferenceField(Slot))
@@ -365,6 +366,9 @@ class Game(Document):
                 self.state = GAME_STATE_ENDED
                 self.winner = GAME_RESULT_SECOND
 
+    def is_active(self):
+        return self.state == GAME_STATE_RUNNING
+
     def save(self, force_insert=False, validate=True, clean=True, write_concern=None, cascade=None, cascade_kwargs=None,
              _refs=None, **kwargs):
 
@@ -372,6 +376,18 @@ class Game(Document):
 
         return super(Game, self).save(force_insert, validate, clean, write_concern, cascade, cascade_kwargs, _refs,
                                       **kwargs)
+
+
+    def is_user_turn(self, user_id):
+        if self.first_user_id == user_id and self.is_first_turn:
+            return True
+        if self.second_user_id == user_id and not self.is_first_turn:
+            return True
+
+        return False
+
+    def flip_turn(self):
+        self.is_first_turn = not self.is_first_turn
 
     def as_dict(self, user_id=None):
         if user_id is None or (user_id != self.first_user_id and user_id != self.second_user_id):
@@ -391,6 +407,9 @@ class Game(Document):
 
         if self.state == GAME_STATE_ENDED:
             result['winner'] = self.winner
+
+        if self.state == GAME_STATE_RUNNING:
+            result['is_your_turn'] = self.is_user_turn(user_id)
 
         return result
 
