@@ -1,0 +1,3 @@
+DATABASE_NAME = 'lgt_db'
+DATABASE_USER = 'lgt'
+DATABASE_PASSWORD = 'lgt'

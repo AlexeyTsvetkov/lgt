@@ -1,0 +1,5 @@
+Django==1.6.3
+django-annoying==0.7.9
+mongoengine==0.8.7
+pymongo==2.7
+MySQL-python==1.2.3

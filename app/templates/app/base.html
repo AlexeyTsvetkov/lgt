@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+
+  <meta charset="utf-8">
+
+  <title>{% block title %}{% endblock title %}</title>
+
+  {% block styles %}
+  {% endblock styles %}
+
+  {% block scripts %}
+  {% endblock scripts %}
+
+</head>
+
+<body>
+  <form style="display: none;" id="empty-form" method="POST">
+      {% csrf_token %}
+  </form>
+
+  {% block content %}
+  {% endblock content  %}
+
+</body>
+</html>
