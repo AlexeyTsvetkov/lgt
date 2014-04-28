@@ -314,3 +314,24 @@ class Game(Document):
 
     first_slots = ListField(ReferenceField(Slot))
     second_slots = ListField(ReferenceField(Slot))
+
+    def accept_opponent(self, opponent_id):
+        self.second_user_id = opponent_id
+
+        def add_slots(lst, user_id):
+            for i in range(10):
+                slot = Slot()
+                slot.slot_id = i+1
+                slot.game_id = self.id
+                slot.user_id = user_id
+                slot.value = 100
+                slot.term = create_identity()
+                slot.save()
+                lst.append(slot)
+
+        add_slots(self.first_slots, self.first_user_id)
+        add_slots(self.second_slots, self.second_user_id)
+
+        self.save()
+
+

@@ -1,6 +1,8 @@
 from functools import wraps
-from annoying.decorators import ajax_request
+from annoying.decorators import ajax_request, render_to
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
+from django.http.response import HttpResponseRedirect, HttpResponse
 
 from models import *
 
@@ -40,24 +42,10 @@ def create_game(request):
     Slot.drop_collection()
     Game.drop_collection()
 
-    game = Game(first_user_id=1, second_user_id=2)
+    game = Game(first_user_id=1)
     game.save()
 
-    def add_slots(lst, user_id):
-        for i in range(10):
-            slot = Slot()
-            slot.slot_id = i+1
-            slot.game_id = game.id
-            slot.user_id = user_id
-            slot.value = 100
-            slot.term = create_identity()
-            slot.save()
-            lst.append(slot)
-
-    add_slots(game.first_slots, game.first_user_id)
-    add_slots(game.second_slots, game.second_user_id)
-
-    game.save()
+    game.accept_opponent(2)
 
     return {'result': '1'}
 
@@ -108,3 +96,33 @@ def apply_slot(request, slot_id, card, from_right):
     slot.save()
 
     return { 'slot': slot.as_dict() }
+
+@login_required
+@render_to('games/my_games.html')
+def my_games(request):
+    games = Game.\
+        objects(Q(first_user_id=request.user.id) | Q (second_user_id=request.user.id)).\
+        filter(second_user_id__exists=True)
+    return {'games': games}
+
+@login_required
+def new_game(request):
+
+    game = Game.objects(second_user_id__exists=False).filter(first_user_id__ne=request.user.id).first()
+
+    if game is None:
+        game = Game(first_user_id=request.user.id).save()
+        return HttpResponseRedirect(reverse('games.views.wait_opponent', kwargs={'game_id': game.id}))
+    else:
+        game.accept_opponent(request.user.id)
+        return HttpResponseRedirect(reverse('games.views.slots', kwargs={'game_id': game.id}))
+
+
+@login_required
+def wait_opponent(request, game_id):
+    game = Game.objects(id=game_id)[0]
+    if game.second_user_id is None:
+
+        return HttpResponse("wait")
+    else:
+        return HttpResponseRedirect(reverse('games.views.slots', kwargs={'game_id': game.id}))
