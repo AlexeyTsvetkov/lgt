@@ -1,0 +1,40 @@
+
+/* ============ COMMON =============== */
+
+body {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.game-table {
+    width: 50%;
+}
+
+/* ================ PLAYER ============== */
+
+#player {
+    float: left;
+    width: 49%;
+}
+
+#player th, #player tr  {
+    text-align: left;
+}
+
+/* ================ ENEMY ============== */
+
+#enemy {
+    float: right;
+    width: 49%;
+}
+
+#enemy .game-table {
+    float: right;
+}
+
+#enemy th,
+#enemy tr,
+#enemy p,
+#enemy h2 {
+    text-align: right;
+}
