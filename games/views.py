@@ -52,11 +52,9 @@ def create_game(request):
 @ajax_request
 @login_required
 @game_request
-def slots(request):
+def game_state(request):
 
-    result = [slot.as_dict() for slot in request.my_slots]
-
-    return {'slots': result}
+    return {'data': request.game.as_dict(request.user.id) }
 
 CARDS = {
     'id': create_identity,
@@ -95,7 +93,7 @@ def apply_slot(request, slot_id, card, from_right):
 
     slot.save()
 
-    return { 'slot': slot.as_dict() }
+    return {'data': request.game.as_dict(request.user.id)}
 
 @login_required
 @render_to('games/my_games.html')

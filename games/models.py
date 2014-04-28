@@ -301,16 +301,33 @@ class Slot(Document):
     value = IntField()
     term = EmbeddedDocumentField(Term)
 
+    def is_alive(self):
+        return self.value > 0
+
     def as_dict(self):
         return {
             'id': str(self.slot_id),
-            'value': self.value,
+            'is_alive': self.is_alive(),
+            'vitality': self.value,
             'term': str(self.term)
         }
+
+GAME_STATE_AWAITING = 0
+GAME_STATE_RUNNING = 1
+GAME_STATE_ENDED = 2
+
+GAME_STATE_NAMES = ("awaiting", "running", "ended",)
+
+GAME_RESULT_FIRST = 0
+GAME_RESULT_SECOND = 1
 
 class Game(Document):
     first_user_id = IntField()
     second_user_id = IntField()
+
+    winner = IntField()
+
+    state = IntField(default=GAME_STATE_AWAITING)
 
     first_slots = ListField(ReferenceField(Slot))
     second_slots = ListField(ReferenceField(Slot))
@@ -333,5 +350,48 @@ class Game(Document):
         add_slots(self.second_slots, self.second_user_id)
 
         self.save()
+
+    def update_state(self):
+        state = self.state
+        if state == GAME_STATE_AWAITING:
+            if self.second_user_id is not None:
+                self.state = GAME_STATE_RUNNING
+            return
+        if state == GAME_STATE_RUNNING:
+            if len(filter(lambda s: s.is_alive(), self.first_slots)) == 0:
+                self.state = GAME_STATE_ENDED
+                self.winner = GAME_RESULT_FIRST
+            elif len(filter(lambda s: s.is_alive(), self.second_slots)) == 0:
+                self.state = GAME_STATE_ENDED
+                self.winner = GAME_RESULT_SECOND
+
+    def save(self, force_insert=False, validate=True, clean=True, write_concern=None, cascade=None, cascade_kwargs=None,
+             _refs=None, **kwargs):
+
+        self.update_state()
+
+        return super(Game, self).save(force_insert, validate, clean, write_concern, cascade, cascade_kwargs, _refs,
+                                      **kwargs)
+
+    def as_dict(self, user_id=None):
+        if user_id is None or (user_id != self.first_user_id and user_id != self.second_user_id):
+            raise Exception("undefined")
+
+        proponent_slots = self.first_slots
+        opponent_slots = self.second_slots
+        if user_id != self.first_user_id:
+            proponent_slots, opponent_slots = opponent_slots, proponent_slots
+
+        result = {
+            'id': str(self.id),
+            'state': GAME_STATE_NAMES[self.state],
+            'proponent_slots': map(lambda s: s.as_dict(), proponent_slots),
+            'opponent_slots' : map(lambda s: s.as_dict(), opponent_slots)
+        }
+
+        if self.state == GAME_STATE_ENDED:
+            result['winner'] = self.winner
+
+        return result
 
 
