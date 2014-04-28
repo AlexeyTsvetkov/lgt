@@ -131,15 +131,17 @@ def check_if_nat(term, message="Nat expected"):
     if not isinstance(term, Nat):
         raise ReductionException(message)
 
-def get_slot(slot_id):
+def get_slot(queryset, slot_id):
     try:
-        return Slot.objects(slot_id=slot_id)[0]
+        return queryset.filter(slot_id=slot_id)[0]
     except:
         raise ReductionException("slot " + str(slot_id) + "not found")
 
+def get_my_slot(request, slot_id):
+    return get_slot(request.my_slots, slot_id)
 
-def handle_ready_builtin(fn):
-    fn.applied_args = map(make_reduction, fn.applied_args)
+def handle_ready_builtin(fn, request):
+    fn.applied_args = map(lambda x: make_reduction(x, request), fn.applied_args)
 
     if isinstance(fn, Succ):
         check_if_nat(fn.applied_args[0])
@@ -153,7 +155,7 @@ def handle_ready_builtin(fn):
         check_if_nat(fn.applied_args[0])
         slot_id = fn.applied_args[0].value
 
-        slot = get_slot(slot_id)
+        slot = get_my_slot(request, slot_id)
 
         return slot.term
 
@@ -161,7 +163,7 @@ def handle_ready_builtin(fn):
         check_if_nat(fn.applied_args[0])
         slot_id = fn.applied_args[0].value
 
-        slot = get_slot(slot_id)
+        slot = get_my_slot(request, slot_id)
 
         slot.value += 1
         slot.save()
@@ -213,9 +215,9 @@ def replace_var(var_name, term, arg):
 
     return term
 
-def make_reduction(term):
+def make_reduction(term, request):
     if isinstance(term, Application):
-        term.first_term = make_reduction(term.first_term)
+        term.first_term = make_reduction(term.first_term, request)
         first = term.first_term
 
         if not first.is_applicable():
@@ -224,14 +226,14 @@ def make_reduction(term):
         second = term.second_term
 
         if isinstance(first, Abstraction):
-            return make_reduction(replace_var(first.var_name, first.body, second))
+            return make_reduction(replace_var(first.var_name, first.body, second), request)
 
         if isinstance(first, BuiltinFunction):
 
             first.apply_to(second)
 
             if first.is_ready():
-                return handle_ready_builtin(first)
+                return handle_ready_builtin(first, request)
 
     return term
 
@@ -272,6 +274,10 @@ def create_s_comb():
 
 class Slot(Document):
     slot_id = IntField()
+
+    game_id = ObjectIdField()
+    user_id = IntField()
+
     value = IntField()
     term = EmbeddedDocumentField(Term)
 
@@ -281,3 +287,10 @@ class Slot(Document):
             'value': self.value,
             'term': str(self.term)
         }
+
+class Game(Document):
+    first_user_id = IntField()
+    second_user_id = IntField()
+
+    first_slots = ListField(ReferenceField(Slot))
+    second_slots = ListField(ReferenceField(Slot))
