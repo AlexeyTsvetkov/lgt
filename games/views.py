@@ -59,6 +59,7 @@ def game_state(request):
 CARDS = {
     'id': create_identity,
     'zero': create_zero,
+    'scomb': create_s_comb,
     'succ': Succ,
     'dbl': Dbl,
     'get': Get,
