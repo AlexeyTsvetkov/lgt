@@ -18,9 +18,12 @@
         <script src="{% static "js/lib/prism.js" %}"></script>
 
         <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+        <link href='http://fonts.googleapis.com/css?family=Spirax' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="{% static "css/fontcustom.css" %}">
         <link rel="stylesheet" href="{% static "css/normalize.css" %}">
         <link rel="stylesheet" href="{% static "css/app.css" %}">
         <link rel="stylesheet" href="{% static "css/prism.css" %}">
+        <link rel="stylesheet" href="{% static "css/card.css" %}">
     </head>
     <body>
         <div id="container">
@@ -33,7 +36,7 @@
 
                 <div id="popup">
                     <i class="fa fa-times close"></i>
-                    <div id="cards"></div>
+                    <div id="cards-holder"><div id="cards"></div></div>
                 </div>
             </div>
 

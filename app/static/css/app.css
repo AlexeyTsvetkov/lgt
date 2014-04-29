@@ -77,6 +77,15 @@ body {
     cursor: pointer;
 }
 
+#cards-holder {
+    margin: 20px 10px 0px 10px;
+    position: relative;
+    display: inline-block;
+    width: 940px;
+    height: 516px;
+    overflow-y: scroll;
+}
+
 /* ============== BUTTONS ============= */
 
 .button {

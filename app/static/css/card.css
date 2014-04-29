@@ -1,0 +1,48 @@
+.card {
+    width: 174px;
+    height: 230px;
+    background-color: #4F3E37;
+    border-radius: 8px;
+    border: 6px solid #85675B;
+    color: #FFC34D;
+    display: inline-block;
+    margin-right: 35px;
+    margin-bottom: 15px;
+}
+
+.card:hover {
+    border: 6px solid #FFC34D;
+    cursor: pointer;
+}
+
+.card .text {
+    background-color: #85675B;
+    font-family: 'Spirax', 'cursive';
+    font-size: 22px;
+}
+
+.card .block {
+    border-radius: 4px;
+    margin: 5px;
+}
+
+.card .text.small {
+    font-size: 18px;
+}
+
+.card .icon i {
+    font-size: 72px;
+    font: 'fontcustom';
+    text-align:center;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    display: inline-block;
+    width: 100%;
+}
+
+.icon-zombie {
+    margin-left: 10px;
+    padding-top: 20px;
+}
+
