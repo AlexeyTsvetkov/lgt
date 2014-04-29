@@ -32,6 +32,10 @@ var GameApiRequests = {
             var url = StringBuilder.join(['/game', id, 'apply', termId, card, applyType], '/');
 
             $.get(url, function (data) {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
                 data = data.data;
                 Logger.logResponse('Apply response', data);
                 this.updateSlots(data, callback);
