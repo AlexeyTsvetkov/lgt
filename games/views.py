@@ -61,6 +61,7 @@ CARDS = {
     'id': create_identity,
     'zero': create_zero,
     'scomb': create_s_comb,
+    'kcomb': create_k_comb,
     'succ': Succ,
     'dbl': Dbl,
     'get': Get,

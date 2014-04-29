@@ -290,6 +290,15 @@ def create_s_comb():
         )
     )
 
+def create_k_comb():
+    return Abstraction(
+        var_name='x',
+        body=Abstraction(
+            var_name='y',
+            body=Variable(name='x')
+        )
+    )
+
 #############################
 
 class Slot(Document):
