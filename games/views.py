@@ -2,10 +2,12 @@ from functools import wraps
 from annoying.decorators import ajax_request, render_to
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http.response import HttpResponseRedirect, HttpResponse
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render_to_response
 
 from models import *
+from reduction import *
+from exceptions import GameException
 
 def game_request(func):
     @wraps(func)

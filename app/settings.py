@@ -126,7 +126,8 @@ PIPELINE_COMPILERS = (
     'pipeline_browserify.compiler.BrowserifyCompiler',
 )
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+#STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
 
 PIPELINE_BROWSERIFY_ARGUMENTS = '-t reactify'
 
