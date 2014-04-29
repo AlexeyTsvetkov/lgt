@@ -95,7 +95,7 @@ def apply_term_to_slot(request, slot_id, term, from_right):
         else:
             application = Application(second_term=slot.term, first_term=term)
 
-        new_slot_term = make_reduction(application, request)
+        new_slot_term = Reducer(request).make_reduction(application)
     except Exception as e:
         return {'error': str(e)}
 
