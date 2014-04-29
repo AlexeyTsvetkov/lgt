@@ -17,17 +17,35 @@
         <script src="{% static "js/lib/promise-4.0.0.js" %}"></script>
         <script src="{% static "js/lib/prism.js" %}"></script>
 
-
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
         <link rel="stylesheet" href="{% static "css/normalize.css" %}">
         <link rel="stylesheet" href="{% static "css/app.css" %}">
         <link rel="stylesheet" href="{% static "css/prism.css" %}">
     </head>
     <body>
-        <h1>LGT</h1>
-        <div style="display: none"  class="game-id" data-game-id="{{ game.id }}"></div>
-        <div id="game">
-        </div>
+        <div id="container">
+            <h1>LGT</h1>
+            <div style="display: none"  class="game-id" data-game-id="{{ game.id }}"></div>
+            <div id="game">
+            </div>
 
-        {% compressed_js 'browserify' %}
+            <div id="popup-holder">
+
+                <div id="popup">
+                    <i class="fa fa-times close"></i>
+                    <div id="cards"></div>
+                </div>
+            </div>
+
+            <script type="application/javascript">
+                $(document).ready(function() {
+                    $('#popup').find('> .close').click(function(e) {
+                        $('#popup-holder').hide();
+                    });
+                });
+            </script>
+
+            {% compressed_js 'browserify' %}
+        </div>
     </body>
 </html>

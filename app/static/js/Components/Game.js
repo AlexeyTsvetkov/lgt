@@ -14,10 +14,12 @@ var Game = React.createClass({
     },
     createGame: function(gameId) {
         GameApiRequests.setGameId(gameId);
-        GameApiRequests.getGameState(gameId, this.updateSlots);
+        var _this = this;
+
+        GameApiRequests.getGameState(gameId, _this.updateSlots);
         setInterval(function() {
-            GameApiRequests.getGameState(gameId, this.updateSlots);
-        }, 1000);
+            GameApiRequests.getGameState(gameId, _this.updateSlots);
+        }, 5000);
     },
     updateSlots: function(playerSlots, enemySlots, isMyTurn) {
         this.setState({playerSlots: playerSlots, enemySlots: enemySlots, isMyTurn: isMyTurn});
