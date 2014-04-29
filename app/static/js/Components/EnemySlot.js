@@ -8,7 +8,7 @@ var EnemySlot = React.createClass({
         var values = [
             <Par text={this.props.slot.id}/>,
             <Par text={this.props.slot.term}/>,
-            <Par text={this.props.slot.value}/>
+            <Par text={this.props.slot.vitality}/>
         ];
         return (<Row values={values}/>);
     }

@@ -11,10 +11,10 @@ var Game = React.createClass({
         GameApiRequests.createGame(this.createGame);
     },
     createGame: function(gameId) {
-        GameApiRequests.listCards(gameId, this.updateSlots);
+        GameApiRequests.getGameState(gameId, this.updateSlots);
     },
-    updateSlots: function(slots) {
-        this.setState({playerSlots: slots, enemySlots: slots})
+    updateSlots: function(playerSlots, enemySlots) {
+        this.setState({playerSlots: playerSlots, enemySlots: enemySlots});
     },
     render: function() {
         return (

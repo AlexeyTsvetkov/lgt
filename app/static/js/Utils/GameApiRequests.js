@@ -5,16 +5,19 @@ var GameApiRequests = {
         $.get('/game/create', function(data) {
             Logger.logResponse('Create game', data);
 
-            var id = data.result;
+            var id = data['result'];
             callback(id);
         });
     },
-    listCards: function(id, callback) {
-        $.get('/game/' + id + '/list/', function (data) {
-            Logger.logResponse('List cards', data);
+    getGameState: function(id, callback) {
+        $.get('/game/' + id + '/game_state', function(data) {
+            data = data.data;
+            Logger.logResponse('Game state', data);
 
-            var slots = data.slots;
-            callback(slots);
+            var playerTurn = data['is_it_your_turn'];
+            var playerSlots = data['proponent_slots'];
+            var enemySlots = data['opponent_slots'];
+            callback(playerSlots, enemySlots);
         });
     }
 };
