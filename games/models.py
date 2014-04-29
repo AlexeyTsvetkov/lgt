@@ -3,6 +3,7 @@ from mongoengine import *
 connect('lgt')
 
 from terms import *
+from term_printer import pretty_print
 
 class Slot(Document):
     slot_id = IntField()
@@ -21,7 +22,7 @@ class Slot(Document):
             'id': str(self.slot_id),
             'is_alive': self.is_alive(),
             'vitality': self.value,
-            'term': str(self.term)
+            'term': pretty_print(self.term)
         }
 
 GAME_STATE_AWAITING = 0
