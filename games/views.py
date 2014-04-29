@@ -76,10 +76,7 @@ def game_assert(expr, message="Error"):
     if not expr:
         raise GameException(message)
 
-@ajax_request
-@login_required
-@game_request
-def apply_slot(request, slot_id, card, from_right):
+def apply_term_to_slot(request, slot_id, term, from_right):
     try:
         game_assert(request.game.is_active(), "Game is not active")
         game_assert(request.game.is_user_turn(request.user.id), "It's not your turn")
@@ -87,8 +84,6 @@ def apply_slot(request, slot_id, card, from_right):
         slot = request.my_slots.filter(slot_id=slot_id)[0]
 
         game_assert(slot.is_alive(), "Slot is not active")
-
-        term = CARDS[card]()
 
         if int(from_right) == 1:
             application = Application(first_term=slot.term, second_term=term)
@@ -106,6 +101,25 @@ def apply_slot(request, slot_id, card, from_right):
     request.game.save()
 
     return {'data': request.game.as_dict(request.user.id)}
+
+@ajax_request
+@login_required
+@game_request
+def apply_card(request, slot_id, card, from_right):
+    term = CARDS[card]()
+
+    return apply_term_to_slot(request, slot_id, term, from_right)
+
+@ajax_request
+@login_required
+@game_request
+def apply_slot(request, slot_id, second_slot_id, from_right):
+    game_assert(slot_id != second_slot_id, "Don't apply to the same slot")
+
+    second_slot = request.my_slots.filter(slot_id=second_slot_id)[0]
+    game_assert(second_slot.is_alive(), "Slot is not alive")
+
+    return apply_term_to_slot(request, slot_id, second_slot.term, from_right)
 
 @login_required
 @render_to('games/my_games.html')

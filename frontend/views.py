@@ -1,6 +1,5 @@
 from annoying.decorators import render_to
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
 from games.views import game_request
 
 

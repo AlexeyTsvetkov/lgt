@@ -26,10 +26,10 @@ var GameApiRequests = {
 
         }.bind(this));
     },
-    setApplyCard: function(callback) {
-        this.applyCard = function(card, slot, applyType) {
+    setApplyTerm: function(callback) {
+        this.applyTerm = function(card, termId, applyType) {
             var id = this.gameId;
-            var url = StringBuilder.join(['/game', id, 'apply', slot, card, applyType], '/');
+            var url = StringBuilder.join(['/game', id, 'apply', termId, card, applyType], '/');
 
             $.get(url, function (data) {
                 data = data.data;

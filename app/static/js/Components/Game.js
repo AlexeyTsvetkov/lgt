@@ -10,7 +10,7 @@ var Game = React.createClass({
     componentDidMount: function() {
         this.createGame($('.game-id').data('game-id'));
         GameApiRequests.loadCards(this.updateCards);
-        GameApiRequests.setApplyCard(this.updateSlots);
+        GameApiRequests.setApplyTerm(this.updateSlots);
     },
     createGame: function(gameId) {
         GameApiRequests.setGameId(gameId);

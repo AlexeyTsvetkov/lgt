@@ -12,7 +12,7 @@ var CardChoice = React.createClass({
         Logger.logResponse('Selected', {card: card, slot: slot, applyType: type});
 
         var toRight = (type === 'right')?1:0;
-        GameApiRequests.applyCard(card, slot, toRight);
+        GameApiRequests.applyTerm(card, slot, toRight);
     },
     getInitialState: function() {
         return {value: 'default'};
@@ -21,6 +21,11 @@ var CardChoice = React.createClass({
         var values = [];
         this.props.cards.forEach(function (card) {
             values.push(<option value={card} key={card}>{card}</option>);
+        });
+
+
+        this.props.otherSlots.forEach(function (slot) {
+            values.push(<option value={slot['id']} key={slot['id']}>Slot {slot['id']}</option>);
         });
 
         return (
