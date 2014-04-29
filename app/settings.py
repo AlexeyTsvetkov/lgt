@@ -38,7 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'games',
-    'frontend'
+    'frontend',
+    'pipeline',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -119,3 +120,24 @@ STATICFILES_FINDERS = (
 )
 
 LOGIN_REDIRECT_URL = '/games/'
+# ================== PIPELINE =================
+
+PIPELINE_COMPILERS = (
+    'pipeline_browserify.compiler.BrowserifyCompiler',
+)
+
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+
+PIPELINE_BROWSERIFY_ARGUMENTS = '-t reactify'
+
+PIPELINE_JS = {
+    'browserify': {
+        'source_filenames' : (
+            'js/app.browserify.js',
+        ),
+        'output_filename': 'js/browserified.js',
+    },
+}
+
+PIPELINE_CSS_COMPRESSOR = None
+PIPELINE_JS_COMPRESSOR = None
