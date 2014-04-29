@@ -1,4 +1,5 @@
 var Logger = require('./Logger.js');
+var StringBuilder = require('./StringBuilder.js')
 
 var GameApiRequests = {
     createGame: function(callback) {
@@ -9,17 +10,6 @@ var GameApiRequests = {
             callback(id);
         });
     },
-    getGameState: function(id, callback) {
-        $.get('/game/' + id + '/game_state', function(data) {
-            data = data.data;
-            Logger.logResponse('Game state', data);
-
-            var playerTurn = data['is_it_your_turn'];
-            var playerSlots = data['proponent_slots'];
-            var enemySlots = data['opponent_slots'];
-            callback(playerSlots, enemySlots);
-        });
-    },
     loadCards: function(callback) {
         $.get('/game/cards/available_cards', function(data) {
             Logger.logResponse('Load cards', data);
@@ -27,6 +17,35 @@ var GameApiRequests = {
             var cards = data['cards'];
             callback(cards);
         });
+    },
+    getGameState: function(id, callback) {
+        $.get('/game/' + id + '/game_state', function(data) {
+            data = data.data;
+            Logger.logResponse('Game state', data);
+            this.updateSlots(data, callback);
+
+        }.bind(this));
+    },
+    setApplyCard: function(callback) {
+        this.applyCard = function(card, slot, applyType) {
+            var id = this.gameId;
+            var url = StringBuilder.join(['/game', id, 'apply', slot, card, applyType], '/');
+
+            $.get(url, function (data) {
+                data = data.data;
+                Logger.logResponse('Apply response', data);
+                this.updateSlots(data, callback);
+            }.bind(this));
+        }
+    },
+    updateSlots: function(data, callback) {
+        var playerTurn = data['is_it_your_turn'];
+        var playerSlots = data['proponent_slots'];
+        var enemySlots = data['opponent_slots'];
+        callback(playerSlots, enemySlots);
+    },
+    setGameId: function(id) {
+        this.gameId = id;
     }
 };
 

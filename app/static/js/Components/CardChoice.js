@@ -1,13 +1,18 @@
 /** @jsx React.DOM */
 
-var Logger = require('../Utils/Logger.js')
+var Logger = require('../Utils/Logger.js');
+var GameApiRequests = require('../Utils/GameApiRequests.js');
 
 var CardChoice = React.createClass({
     handleSelect: function(e) {
         var card = e.target.value;
-        var apply = this.props.type;
         var slot = this.props.slot;
-        Logger.logResponse('Selected', {card: card, apply: apply, slot: slot});
+        var type = this.props.type;
+
+        Logger.logResponse('Selected', {card: card, slot: slot, applyType: type});
+
+        var toRight = (type === 'right')?1:0;
+        GameApiRequests.applyCard(card, slot, toRight);
     },
     getInitialState: function() {
         return {value: 'default'};
