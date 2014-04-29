@@ -14,12 +14,9 @@ var Game = React.createClass({
     },
     createGame: function(gameId) {
         GameApiRequests.setGameId(gameId);
-        var _this = this;
-
-        GameApiRequests.getGameState(gameId, _this.updateSlots);
-
+        GameApiRequests.getGameState(gameId, this.updateSlots);
         setInterval(function() {
-            GameApiRequests.getGameState(gameId, _this.updateSlots);
+            GameApiRequests.getGameState(gameId, this.updateSlots);
         }, 1000);
     },
     updateSlots: function(playerSlots, enemySlots, isMyTurn) {
