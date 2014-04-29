@@ -1,9 +1,10 @@
 from terms import *
 from exceptions import *
 
-def check_if_nat(term, message="Nat expected"):
-    if not isinstance(term, Nat):
-        raise GameException(message)
+def check_if_nat(*terms):
+    for term in terms:
+        if not isinstance(term, Nat):
+            raise GameException("Nat expected")
 
 def get_slot(queryset, slot_id):
     try:
@@ -62,6 +63,24 @@ def handle_ready_builtin(fn, request):
         slot = get_slot(request.opponent_slots, slot_id)
 
         return slot.term
+
+    if isinstance(fn, Attack):
+        check_if_nat(*fn.applied_args)
+
+        prop_slot_id = fn.applied_args[0].value
+        opp_slot_id = fn.applied_args[1].value
+        n = fn.applied_args[2].value
+
+        prop_slot = get_my_slot(request, prop_slot_id)
+        opp_slot = get_slot(request.opponent_slots, opp_slot_id)
+
+        prop_slot.value -= n
+        opp_slot.value -= 2 * n
+
+        prop_slot.save()
+        opp_slot.save()
+
+        return create_identity()
 
     raise GameException("Unknown builtin type: " + str(fn.__class__))
 
@@ -127,6 +146,8 @@ def make_reduction(term, request):
 
             if first.is_ready():
                 return handle_ready_builtin(first, request)
+
+            return first
 
         raise GameException(str(first) + " is not applicable")
 

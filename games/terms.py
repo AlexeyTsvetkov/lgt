@@ -123,6 +123,13 @@ class Copy(BuiltinFunction):
     def get_await_args(self):
         return "i",
 
+class Attack(BuiltinFunction):
+    def get_name(self):
+        return "attack"
+
+    def get_await_args(self):
+        return "i", "j", "n"
+
 class Application(Term):
     first_term = EmbeddedDocumentField(Term)
     second_term = EmbeddedDocumentField(Term)
