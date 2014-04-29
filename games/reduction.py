@@ -105,10 +105,10 @@ def make_reduction(term, request):
         term.first_term = make_reduction(term.first_term, request)
         first = term.first_term
 
-        if not first.is_applicable():
-            raise GameException(str(first) + " is not applicable")
-
         second = term.second_term
+
+        if isinstance(first, Nat) and isinstance(second, Nat):
+            return Nat(value=first.value ** second.value)
 
         if isinstance(first, Abstraction):
             return make_reduction(replace_var(first.var_name, first.body, second), request)
@@ -119,5 +119,7 @@ def make_reduction(term, request):
 
             if first.is_ready():
                 return handle_ready_builtin(first, request)
+
+        raise GameException(str(first) + " is not applicable")
 
     return term
