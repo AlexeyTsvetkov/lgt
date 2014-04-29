@@ -55,6 +55,14 @@ def handle_ready_builtin(fn, request):
 
         return create_identity()
 
+    if isinstance(fn, Copy):
+        check_if_nat(fn.applied_args[0])
+        slot_id = fn.applied_args[0].value
+
+        slot = get_slot(request.opponent_slots, slot_id)
+
+        return slot.term
+
     raise GameException("Unknown builtin type: " + str(fn.__class__))
 
 #########################

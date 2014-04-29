@@ -116,6 +116,13 @@ class Dec(BuiltinFunction):
     def get_await_args(self):
         return "i",
 
+class Copy(BuiltinFunction):
+    def get_name(self):
+        return "copy"
+
+    def get_await_args(self):
+        return "i",
+
 class Application(Term):
     first_term = EmbeddedDocumentField(Term)
     second_term = EmbeddedDocumentField(Term)

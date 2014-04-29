@@ -69,6 +69,7 @@ CARDS = {
     'get': Get,
     'inc': Inc,
     'dec': Dec,
+    'copy': Copy
 }
 
 @ajax_request
