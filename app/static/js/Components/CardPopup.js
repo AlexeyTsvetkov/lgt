@@ -78,8 +78,9 @@ var CardPopup = React.createClass({
         $('#popup-holder').show();
     },
     render: function() {
+        var tip = 'Apply a card to the ' + this.props.type;
         return (
-            <a className="button" onClick={this.handleClick}>
+            <a className="button" onClick={this.handleClick} title={tip}>
                 <i className="icon-card"></i>
             </a>
         );
