@@ -1,6 +1,8 @@
 #Environment
 .idea
 app/conf.py
+app/static/js/browserified.js
+static/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
