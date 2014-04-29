@@ -1,19 +1,24 @@
 from terms import *
 from exceptions import *
 
+REDUCTION_LIMIT = 1000
+
 
 class LimitCalls(object):
-    def __init__(self, limit):
-        self.limit = limit
+    def __init__(self):
+        pass
 
     def __call__(self, fn):
-        def wrapper(*args, **kwargs):
-            if self.limit == 0:
+        def wrapper(self, *args, **kwargs):
+            field_limit = 'limit_' + fn.__name__
+            limit = getattr(self, field_limit, REDUCTION_LIMIT)
+
+            if limit == 0:
                 raise GameException("Reduction limit")
 
-            self.limit -= 1
+            setattr(self, field_limit, limit - 1)
 
-            return fn(*args, **kwargs)
+            return fn(self, *args, **kwargs)
 
         return wrapper
 
@@ -83,7 +88,7 @@ class Reducer(object):
 
         return term
 
-    @LimitCalls(50)
+    @LimitCalls()
     def make_reduction(self, term):
         if isinstance(term, Application):
             term.first_term = self.make_reduction(term.first_term)
@@ -110,7 +115,6 @@ class Reducer(object):
 
         return term
 
-    @LimitCalls(50)
     def handle_ready_builtin(self, fn):
         fn.applied_args = map(lambda x: self.make_reduction(x), fn.applied_args)
 
