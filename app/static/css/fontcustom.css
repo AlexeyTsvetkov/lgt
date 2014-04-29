@@ -25,6 +25,7 @@
 [data-icon]:before,
 .icon-angel:before,
 .icon-birds:before,
+.icon-card:before,
 .icon-clone:before,
 .icon-egg:before,
 .icon-get:before,
@@ -56,6 +57,7 @@
 
 .icon-angel:before { content: "\f101"; }
 .icon-birds:before { content: "\f102"; }
+.icon-card:before { content: "\f114"; }
 .icon-clone:before { content: "\f103"; }
 .icon-egg:before { content: "\f105"; }
 .icon-get:before { content: "\f106"; }

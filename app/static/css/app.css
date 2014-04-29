@@ -105,4 +105,9 @@ body {
 	position:relative;
 	top:1px;
 }
-
+.button > [class^="icon-"],
+.button > [class*=" icon-"] {
+    font-size: 35px;
+    margin-left: 4px;
+    margin-top: 5px;
+}

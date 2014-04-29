@@ -78,7 +78,11 @@ var CardPopup = React.createClass({
         $('#popup-holder').show();
     },
     render: function() {
-        return (<a className="button" onClick={this.handleClick}></a>);
+        return (
+            <a className="button" onClick={this.handleClick}>
+                <i className="icon-card"></i>
+            </a>
+        );
     }
 });
 
