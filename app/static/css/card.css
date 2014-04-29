@@ -11,7 +11,7 @@
 }
 
 .card:hover {
-    border: 6px solid #FFC34D;
+    border: 6px solid #c69988;
     cursor: pointer;
 }
 
@@ -34,7 +34,10 @@
     font-size: 72px;
     font: 'fontcustom';
     text-align:center;
+    margin-top: 12px;
+    margin-bottom: 12px;
 }
+
 
 [class^="icon-"], [class*=" icon-"] {
     display: inline-block;

@@ -1,11 +1,15 @@
 /** @jsx React.DOM */
 
 var StringBuilder = require('../Utils/StringBuilder.js');
+var Logger = require('../Utils/Logger.js');
 
-var CARDS = [
-    {name: 'id', params: ['x'], ret: 'x', desc: 'Examine again it\'s always the same', icon: 'stork'}
-];
+var CARDS = require('./Cards.js')
 
+var CardTextBlock = React.createClass({
+    render: function() {
+        return (<div><div className="text block">{this.props.text}</div></div>);
+    }
+});
 
 var CardHeader = React.createClass({
     render: function() {
@@ -39,23 +43,27 @@ var CardDescription = React.createClass({
 
 var Card = React.createClass({
     render: function() {
-        var card = this.props.card;
-        var cardData = _.find(CARDS, function (c) { return c.name === card; });
+        var cardName = this.props.card;
+        var card = _.find(CARDS, function (c) { return c.name === cardName; });
 
-        if (cardData === undefined)
+        if (card === undefined) {
+            Logger.warn('Unknown card:' + cardName);
             return (<div></div>);
+        }
 
-        var paramString = StringBuilder.join(cardData.params, ', ');
-        var headerString = StringBuilder.capitalise(cardData.name) + ' ' + paramString;
-        var icon = 'icon-' + cardData.icon;
-        var description = cardData.desc;
-        var returnString = 'return ' + cardData.ret;
+        var paramString = StringBuilder.join(card.params, ', ');
+        var headerString = StringBuilder.capitalise(card.name) + ' ' + paramString;
+        var icon = 'icon-' + card.icon;
+        var description = card.desc;
+        var sideEffect = card.sideEffect;
+        var returnString = 'return ' + card.ret;
 
         return (
-        <div className="card">
-                <CardHeader text={headerString} />
+        <div className="card" title={description}>
+                <CardTextBlock text={headerString} />
                 <CardImage icon={icon} />
-                <CardDescription returns={returnString} text={description} />
+                <CardTextBlock text={sideEffect} />
+                <CardTextBlock text={returnString} />
         </div>
         );
     }
@@ -64,8 +72,10 @@ var Card = React.createClass({
 var CardTable = React.createClass({
     render: function() {
         var cards = [];
-        this.props.cards.forEach(function(card) {
-            for (var i = 0; i < 10; i++)
+        _
+        .sortBy(this.props.cards, function (card) {return card;})
+        .forEach(function(card) {
+            console.log(card);
             cards.push(<Card card={card} />);
         });
         return (<div>{cards}</div>);
