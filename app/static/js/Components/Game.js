@@ -8,7 +8,7 @@ var Game = React.createClass({
         return {playerSlots: [], enemySlots: [], cards: []};
     },
     componentDidMount: function() {
-        GameApiRequests.createGame(this.createGame);
+        this.createGame($('.game-id').data('game-id'));
         GameApiRequests.loadCards(this.updateCards);
         GameApiRequests.setApplyCard(this.updateSlots);
     },
