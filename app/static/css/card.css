@@ -8,11 +8,19 @@
     display: inline-block;
     margin-right: 35px;
     margin-bottom: 15px;
+    cursor: pointer;
 }
 
 .card:hover {
     border: 6px solid #c69988;
-    cursor: pointer;
+}
+
+.card > a {
+    position: absolute;
+    z-index: 100;
+    background-color: transparent;
+    width: 174px;
+    height: 230px;
 }
 
 .card .text {

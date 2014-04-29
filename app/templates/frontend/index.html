@@ -43,13 +43,9 @@
 
             <script type="application/javascript">
                 $(document).ready(function() {
-                    $('#popup').click(function(e) {e.stopPropagation();});
                     $('#popup').find('> .close').click(function(e) {
                         $('#popup-holder').hide();
                     });
-                    $('#popup-holder').click(function(e) {
-                        $('#popup-holder').hide();
-                    })
                 });
             </script>
 
