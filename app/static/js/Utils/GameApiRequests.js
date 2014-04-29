@@ -43,10 +43,10 @@ var GameApiRequests = {
         }
     },
     updateSlots: function(data, callback) {
-        var playerTurn = data['is_it_your_turn'];
+        var playerTurn = data['is_your_turn'];
         var playerSlots = data['proponent_slots'];
         var enemySlots = data['opponent_slots'];
-        callback(playerSlots, enemySlots);
+        callback(playerSlots, enemySlots, playerTurn);
     },
     setGameId: function(id) {
         this.gameId = id;

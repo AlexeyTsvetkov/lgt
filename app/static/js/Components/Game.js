@@ -22,15 +22,17 @@ var Game = React.createClass({
             GameApiRequests.getGameState(gameId, _this.updateSlots);
         }, 1000);
     },
-    updateSlots: function(playerSlots, enemySlots) {
-        this.setState({playerSlots: playerSlots, enemySlots: enemySlots});
+    updateSlots: function(playerSlots, enemySlots, isMyTurn) {
+        this.setState({playerSlots: playerSlots, enemySlots: enemySlots, isMyTurn: isMyTurn});
     },
     updateCards: function(cards) {
         this.setState({cards: cards});
     },
     render: function() {
+        var turn = this.state.isMyTurn ? "Your turn" : "Opponent's turn";
         return (
             <div>
+                <div>{turn}</div>
                 <div className="player"><SlotList isPlayer={true} slots={this.state.playerSlots} cards={this.state.cards} /></div>
                 <div className="enemy"><SlotList isPlayer={false} slots={this.state.enemySlots} cards={this.state.cards} /></div>
             </div>
