@@ -3,6 +3,10 @@
 
 body {
     width: 100%;
+    background-color: rgba(196, 113, 24, 0.75);
+    color: #ffffff;
+    font-family: 'Linden Hill', 'serif';
+    font-size: 1.1em;
 }
 
 .game-table {
