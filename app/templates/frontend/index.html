@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load compressed %}
 
 <!DOCTYPE html>
 <html>
@@ -17,7 +18,7 @@
 
 
         <link rel="stylesheet" href="{% static "css/normalize.css" %}">
-        <link rel="stylesheet" href="{% static "css/lgt.css" %}">
+        <link rel="stylesheet" href="{% static "css/app.css" %}">
     </head>
     <body>
         <h1>LGT</h1>
@@ -25,6 +26,6 @@
         <div id="game">
         </div>
 
-        <script type="text/jsx" src="{% static "js/lgt.js" %}"></script>
+        {% compressed_js 'browserify' %}
     </body>
 </html>
