@@ -3,6 +3,7 @@ from annoying.decorators import ajax_request, render_to
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http.response import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render_to_response
 
 from models import *
 
@@ -36,7 +37,7 @@ def game_request(func):
 
     return wrapper
 
-@ajax_request
+@login_required
 def create_game(request):
 
     Slot.drop_collection()
@@ -47,7 +48,7 @@ def create_game(request):
 
     game.accept_opponent(2)
 
-    return {'result': str(game.id)}
+    return redirect_to_room(game.id)
 
 @ajax_request
 @login_required
@@ -114,23 +115,27 @@ def my_games(request):
         filter(second_user_id__exists=True)
     return {'games': games}
 
+def redirect_to_room(game_id):
+   return HttpResponseRedirect(reverse('frontend.views.room', kwargs={'game_id': game_id}))
+
 @login_required
 def new_game(request):
 
     game = Game.objects(second_user_id__exists=False).filter(first_user_id__ne=request.user.id).first()
+    my_game = Game.objects(second_user_id__exists=False).filter(first_user_id=request.user.id).first()
 
-    if game is None:
-        game = Game(first_user_id=request.user.id).save()
+    if game is None or my_game is not None:
+        game = my_game if my_game is not None else Game(first_user_id=request.user.id).save()
         return HttpResponseRedirect(reverse('games.views.wait_opponent', kwargs={'game_id': game.id}))
     else:
         game.accept_opponent(request.user.id)
-        return HttpResponseRedirect(reverse('games.views.game_state', kwargs={'game_id': game.id}))
+        return redirect_to_room(game.id)
 
 
 @login_required
 def wait_opponent(request, game_id):
     game = Game.objects(id=game_id)[0]
     if game.second_user_id is None:
-        return HttpResponse("wait")
+        return render_to_response('games/wait.html')
     else:
-        return HttpResponseRedirect(reverse('games.views.game_state', kwargs={'game_id': game.id}))
+        return redirect_to_room(game.id)

@@ -1,0 +1,9 @@
+{% extends "app/base.html" %}
+{% block content %}
+    <b>Waiting for opponent</b>
+    <script>
+        setTimeout(function() {
+            window.location.reload();
+        }, 10000)
+    </script>
+{% endblock %}

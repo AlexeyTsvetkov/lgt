@@ -387,7 +387,8 @@ class Game(Document):
         return False
 
     def flip_turn(self):
-        self.is_first_turn = not self.is_first_turn
+        pass
+        #self.is_first_turn = not self.is_first_turn
 
     def as_dict(self, user_id=None):
         if user_id is None or (user_id != self.first_user_id and user_id != self.second_user_id):
