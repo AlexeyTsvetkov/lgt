@@ -19,6 +19,14 @@ var GameApiRequests = {
             var enemySlots = data['opponent_slots'];
             callback(playerSlots, enemySlots);
         });
+    },
+    loadCards: function(callback) {
+        $.get('/game/cards/available_cards', function(data) {
+            Logger.logResponse('Load cards', data);
+
+            var cards = data['cards'];
+            callback(cards);
+        });
     }
 };
 
