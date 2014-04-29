@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from terms import *
 
 def is_simple_term(term):
@@ -7,9 +8,9 @@ def pretty_print(term):
     if isinstance(term, Abstraction):
         body = term.body
         if isinstance(body, Abstraction):
-            return "\%s %s" % (term.var_name, pretty_print(body)[1:])
+            return u"λ %s%s" % (term.var_name, pretty_print(body)[1:])
 
-        return "\%s -> %s" % (term.var_name, pretty_print(body))
+        return u"λ %s.%s" % (term.var_name, pretty_print(body))
 
     if isinstance(term, Application):
         first = term.first_term

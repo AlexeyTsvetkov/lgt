@@ -24,7 +24,7 @@ class BuiltinFunction(Term):
         part3 = " ".join(map(str, self.await_args_left))
         part1 = self.name
 
-        return " ".join((part1, part2, part3,))
+        return " ".join(filter(lambda x: len(x)>0, (part1, part2, part3,)))
 
     @property
     def name(self):
