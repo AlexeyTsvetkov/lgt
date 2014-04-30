@@ -64,6 +64,33 @@ var Card = React.createClass({
         );
     }
 });
+var Term = require('./Term.js');
+
+var ApplicableSlot = React.createClass({
+    handleClick: function(e) {
+        var slotId = this.props.slot.id;
+        var mainSlotId = this.props.mainSlotId;
+        var type = this.props.type;
+
+        Logger.logResponse('Clicked card', {mainSlotId: mainSlotId, slot: slotId, applyType: type});
+
+        var toRight = (type === 'right')?1:0;
+        GameApiRequests.applyTerm(slotId, mainSlotId, toRight);
+        $('#popup-holder').hide();
+    },
+    render: function() {
+        var slot = this.props.slot;
+        var term = slot.term;
+        return (
+            <div className='applicable_term'>
+                <b>Slot {slot.id}</b>
+                <a onClick={this.handleClick}>
+                    <Term code={term}/>
+                </a>
+            </div>
+        );
+    }
+});
 
 var CardTable = React.createClass({
     render: function() {
@@ -75,6 +102,11 @@ var CardTable = React.createClass({
         .forEach(function(card) {
             cards.push(<Card card={card}  type={type} slot={slot} />);
         });
+
+        this.props.otherSlots.forEach(function(sl) {
+            cards.push(<ApplicableSlot mainSlotId={slot} slot={sl} type={type} />);
+        });
+
         return (<div>{cards}</div>);
     }
 });
@@ -85,7 +117,7 @@ var CardPopup = React.createClass({
         var type  = this.props.type;
         var slot  = this.props.slot;
         React.renderComponent(
-            <CardTable cards={cards} type={type} slot={slot} />,
+            <CardTable cards={cards} type={type} slot={slot} otherSlots={this.props.otherSlots}/>,
             document.getElementById('cards')
         );
         $('#popup-holder').show();

@@ -27,9 +27,9 @@ var GameApiRequests = {
         }.bind(this));
     },
     setApplyTerm: function(callback) {
-        this.applyTerm = function(card, termId, applyType) {
+        this.applyTerm = function(termId, slotId, applyType) {
             var id = this.gameId;
-            var url = StringBuilder.join(['/game', id, 'apply', termId, card, applyType], '/');
+            var url = StringBuilder.join(['/game', id, 'apply', slotId, termId, applyType], '/');
 
             $.get(url, function (data) {
                 if (data.error) {

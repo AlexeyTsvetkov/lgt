@@ -15,8 +15,8 @@ var PlayerSlot = React.createClass({
                 <div className="info">
                     <Par text={this.props.slot.id}/>
                     <Healthbar value={this.props.slot.vitality}/>
-                    <CardPopup slot={slot} type='left' cards={this.props.cards} />
-                    <CardPopup slot={slot} type='right' cards={this.props.cards} />
+                    <CardPopup slot={slot} type='left' cards={this.props.cards} otherSlots={this.props.otherSlots} />
+                    <CardPopup slot={slot} type='right' cards={this.props.cards} otherSlots={this.props.otherSlots}/>
                 </div>
                 <div className="lambda"><Term code={this.props.slot.term} /></div>
 
