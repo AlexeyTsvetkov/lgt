@@ -29,6 +29,7 @@
     <body>
         <div id="container">
             {% block top %}
+            {% comment %}
             {% if request.user.is_authenticated %}
             <a href="{% url 'django.contrib.auth.views.logout' %}">logout</a><br/>
             <a href="{% url 'games.views.new_game' %}">new game</a>
@@ -38,6 +39,7 @@
             <form style="display: none;" id="empty-form" method="POST">
             {% csrf_token %}
             </form>
+            {%  endcomment %}
             {% endblock %}
 
             {% block content %}
