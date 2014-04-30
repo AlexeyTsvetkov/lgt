@@ -1,9 +1,10 @@
 {% extends "app/base.html" %}
 {% block content %}
-    <a href="{% url 'games.views.new_game' %}">new game</a>
-    {% for game in games %}
-        <hr/>
-        <br/>
-        <a href="{% url 'frontend.views.room' game_id=game.id %}">Game with {{ game.opponent.username }}</a>
-    {% endfor %}
+
+    <div class="menu">
+ <a class="button-long" href="{% url 'games.views.new_game' %}"><span>New game</span></a>
+        {% for game in games %}
+            <a class="button-long" href="{% url 'frontend.views.room' game_id=game.id %}"><span>Game with {{ game.opponent.username }}</span></a>
+        {% endfor %}
+    </div>
 {% endblock %}

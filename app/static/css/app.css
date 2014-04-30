@@ -1,4 +1,5 @@
 
+
 /* ============ COMMON =============== */
 
 html {
@@ -23,6 +24,27 @@ body {
 
 #game {
     margin: 10px;
+}
+
+.menu {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
+    width: 300px;
+    min-height: 500px;
+    background-color: #85675B;
+    border-radius: 8px;
+    border: 6px solid #4F3E37;
+}
+
+.menu > * {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+
+.menu > .buttons {
+    margin-top: 80px;
 }
 
 /* ================ PLAYER ============== */
@@ -103,10 +125,14 @@ body {
 	display:block;
     verticle-align: bottom;
 }
-.button:hover {
+
+.button:hover,
+.button-long:hover {
 	cursor: pointer;
 }
-.button:active {
+
+.button:active,
+.button-long:active{
 	position:relative;
 	top:1px;
 }
@@ -114,6 +140,25 @@ body {
 .button > [class*=" icon-"] {
     font-size: 35px;
     margin-left: 4px;
+    margin-top: 5px;
+}
+
+.button-long {
+    width: 190px;
+    height: 49px;
+    background-image: url("../img/btnlong.png");
+	display:block;
+    color: #ffffff;
+    vertical-align: text-bottom;
+    text-align: center;
+    font-size: 26px;
+    font-family: 'Linden Hill', 'serif';
+    font-style: italic;
+    text-decoration: none;
+    line-height: 49px;
+}
+
+.button-long > span {
     margin-top: 5px;
 }
 
