@@ -31,10 +31,12 @@
 .icon-get:before,
 .icon-hatching:before,
 .icon-leaf-cycle:before,
+.icon-left:before,
 .icon-lifecycle:before,
 .icon-medicine:before,
 .icon-poison:before,
 .icon-put:before,
+.icon-right:before,
 .icon-seed:before,
 .icon-stork:before,
 .icon-sword:before,
@@ -63,10 +65,12 @@
 .icon-get:before { content: "\f106"; }
 .icon-hatching:before { content: "\f107"; }
 .icon-leaf-cycle:before { content: "\f108"; }
+.icon-left:before { content: "\f115"; }
 .icon-lifecycle:before { content: "\f109"; }
 .icon-medicine:before { content: "\f10a"; }
 .icon-poison:before { content: "\f10c"; }
 .icon-put:before { content: "\f10d"; }
+.icon-right:before { content: "\f116"; }
 .icon-seed:before { content: "\f10f"; }
 .icon-stork:before { content: "\f100"; }
 .icon-sword:before { content: "\f110"; }

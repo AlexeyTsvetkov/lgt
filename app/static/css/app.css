@@ -1,9 +1,13 @@
 
 /* ============ COMMON =============== */
 
+html {
+    background: url('../img/brick.jpg');
+}
+
+
 body {
     width: 100%;
-    background-color: rgba(196, 113, 24, 0.75);
     color: #ffffff;
     font-family: 'Linden Hill', 'serif';
     font-size: 1.1em;
@@ -96,7 +100,8 @@ body {
     width: 45px;
     height: 49px;
     background-image: url("../img/btn.png");
-	display:inline-block;
+	display:block;
+    verticle-align: bottom;
 }
 .button:hover {
 	cursor: pointer;
@@ -110,4 +115,51 @@ body {
     font-size: 35px;
     margin-left: 4px;
     margin-top: 5px;
+}
+
+/* ============= SLOTS ================ */
+
+.slot {
+    display: block;
+    width: 97%;
+    min-height: 100px;
+    margin: 10px;
+    background-color: #4F3E37;
+    border-radius: 8px;
+    border: 6px solid #85675B;
+}
+
+.slot > * {
+    display: block;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    background-color: #85675B;
+}
+
+.slot > .info > * {
+    display: inline-block;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+.slot .right {
+    float: right;
+}
+
+.slot > .lambda > * {
+    margin: 1px;
+}
+
+.slot > .info > p {
+    font-size: 26px;
+}
+
+.health {
+    background-color: rgba(242, 85, 61, 0.64);
+    border-radius: 20px;
+    text-align: center;
+    font-size: 26px;
 }
