@@ -31,7 +31,7 @@ var Game = React.createClass({
         var turn = this.state.isMyTurn ? "Your turn" : "Opponent's turn";
         return (
             <div>
-                <div>{turn}</div>
+                <h2>{turn}</h2>
                 <div className="player"><SlotList isPlayer={true} slots={this.state.playerSlots} cards={this.state.cards} /></div>
                 <div className="enemy"><SlotList isPlayer={false} slots={this.state.enemySlots} cards={this.state.cards} /></div>
             </div>

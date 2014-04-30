@@ -1,6 +1,7 @@
 from functools import wraps
 from annoying.decorators import ajax_request, render_to
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -129,9 +130,14 @@ def apply_slot(request, slot_id, second_slot_id, from_right):
 @login_required
 @render_to('games/my_games.html')
 def my_games(request):
-    games = Game.\
+    games = list(Game.\
         objects(Q(first_user_id=request.user.id) | Q (second_user_id=request.user.id)).\
-        filter(second_user_id__exists=True)
+        filter(second_user_id__exists=True).all())
+
+    for game in games:
+        opponent_user_id = game.second_user_id if game.first_user_id == request.user.id else game.first_user_id
+        game.opponent = User.objects.filter(id=opponent_user_id).first()
+
     return {'games': games}
 
 def redirect_to_room(game_id):
