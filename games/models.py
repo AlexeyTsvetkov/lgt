@@ -34,6 +34,9 @@ GAME_STATE_NAMES = ("awaiting", "running", "ended",)
 GAME_RESULT_FIRST = 0
 GAME_RESULT_SECOND = 1
 
+def does_prefer_combinators(user_id):
+    return user_id == 1
+
 class Game(Document):
     first_user_id = IntField()
     second_user_id = IntField()
@@ -50,13 +53,14 @@ class Game(Document):
         self.second_user_id = opponent_id
 
         def add_slots(lst, user_id):
+            is_comb = does_prefer_combinators(user_id)
             for i in range(10):
                 slot = Slot()
                 slot.slot_id = i+1
                 slot.game_id = self.id
                 slot.user_id = user_id
                 slot.value = 100
-                slot.term = create_identity()
+                slot.term = create_identity(is_comb)
                 slot.save()
                 lst.append(slot)
 

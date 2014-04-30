@@ -104,6 +104,18 @@ color: #e6db74;
 color: #66d9ef;
 }
 
+.token.Icombinator{
+color: #a6e22e;
+}
+
+.token.Kcombinator{
+color: #e20829;
+}
+
+.token.Scombinator{
+color: #51e2e2;
+}
+
 .token.regex,
 .token.important {
 	color: #fd971f;

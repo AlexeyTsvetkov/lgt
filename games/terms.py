@@ -4,6 +4,9 @@ from mongoengine import *
 class Term(EmbeddedDocument):
     meta = {'allow_inheritance': True}
 
+    def __init__(self, is_comb=False, *args,  **kwargs):
+        super(Term, self).__init__(*args, **kwargs)
+
     def bounded_variables(self):
         return set()
 
@@ -130,6 +133,30 @@ class Attack(BuiltinFunction):
     def get_await_args(self):
         return "i", "j", "n"
 
+class KComb(BuiltinFunction):
+    def get_name(self):
+        return "K"
+
+    def get_await_args(self):
+        return "x",
+
+    def is_ready(self):
+        return len(self.applied_args) == 2
+
+class SComb(BuiltinFunction):
+    def get_name(self):
+        return "S"
+
+    def get_await_args(self):
+        return "f", "g", "x"
+
+class IComb(BuiltinFunction):
+    def get_name(self):
+        return "I"
+
+    def get_await_args(self):
+        return "x",
+
 class Application(Term):
     first_term = EmbeddedDocumentField(Term)
     second_term = EmbeddedDocumentField(Term)
@@ -146,42 +173,51 @@ class Application(Term):
 #########################
 
 
-def create_identity():
-    return Abstraction(var_name='x', body=Variable(name='x'))
+def create_identity(is_comb=False):
+    if is_comb:
+        return IComb()
+    else:
+        return Abstraction(var_name='x', body=Variable(name='x'))
 
-def create_zero():
+def create_zero(is_comb=False):
     result = Nat()
     result.value = 0
     return result
 
-def create_s_comb():
-    return Abstraction(
-        var_name='f',
-        body=Abstraction(
-            var_name='g',
+def create_s_comb(is_comb=False):
+    if is_comb:
+        return SComb()
+    else:
+        return Abstraction(
+            var_name='f',
             body=Abstraction(
-                var_name='x',
-                body=Application(
-                    first_term=Application(
-                        first_term=Variable(name='f'),
-                        second_term=Variable(name='x'),
-                    ),
-                    second_term=Application(
-                        first_term=Variable(name='g'),
-                        second_term=Variable(name='x')
+                var_name='g',
+                body=Abstraction(
+                    var_name='x',
+                    body=Application(
+                        first_term=Application(
+                            first_term=Variable(name='f'),
+                            second_term=Variable(name='x'),
+                        ),
+                        second_term=Application(
+                            first_term=Variable(name='g'),
+                            second_term=Variable(name='x')
+                        )
                     )
                 )
             )
         )
-    )
 
-def create_k_comb():
-    return Abstraction(
-        var_name='x',
-        body=Abstraction(
-            var_name='y',
-            body=Variable(name='x')
+def create_k_comb(is_comb=False):
+    if is_comb:
+        return KComb()
+    else:
+        return Abstraction(
+            var_name='x',
+            body=Abstraction(
+                var_name='y',
+                body=Variable(name='x')
+            )
         )
-    )
 
 #############################

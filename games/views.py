@@ -112,7 +112,7 @@ def apply_term_to_slot(request, slot_id, term, from_right):
 @login_required
 @game_request
 def apply_card(request, slot_id, card, from_right):
-    term = CARDS[card]()
+    term = CARDS[card](does_prefer_combinators(request.user.id))
 
     return apply_term_to_slot(request, slot_id, term, from_right)
 

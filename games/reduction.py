@@ -107,7 +107,7 @@ class Reducer(object):
                 first.apply_to(second)
 
                 if first.is_ready():
-                    return self.handle_ready_builtin(first)
+                    return self.make_reduction(self.handle_ready_builtin(first))
 
                 return first
 
@@ -181,6 +181,25 @@ class Reducer(object):
             opp_slot.save()
 
             return create_identity()
+
+        if isinstance(fn, KComb):
+            return fn.applied_args[0]
+
+        if isinstance(fn, SComb):
+            args = fn.applied_args
+            return Application(
+                first_term=Application(
+                    first_term=args[0],
+                    second_term=args[2]
+                ),
+                second_term=Application(
+                    first_term=args[1],
+                    second_term=args[2]
+                )
+            )
+
+        if isinstance(fn, IComb):
+            return fn.applied_args[0]
 
         raise GameException("Unknown builtin type: " + str(fn.__class__))
 
