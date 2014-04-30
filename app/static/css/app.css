@@ -14,7 +14,7 @@ body {
 }
 
 .game-table {
-    width: 80%;
+    width: 95%;
 }
 
 #container h1 {
@@ -149,6 +149,10 @@ body {
     float: right;
 }
 
+.slot > .lambda > pre {
+    width: 470px;
+}
+
 .slot > .lambda > * {
     margin: 1px;
 }
@@ -164,7 +168,7 @@ body {
     font-size: 26px;
 }
 
-.applicable_term > a {
+.applicable-term > a {
     display: block;
     height: 100%;
     width: 100%;
@@ -172,7 +176,25 @@ body {
     cursor: pointer;
 }
 
-.applicable_term {
-
+input {
+    color: #333333;
 }
 
+.login-form {
+    margin-top: 10%;
+    width: 100%;
+    text-align: center;
+}
+
+.login-form > form{
+    display: inline-block;
+}
+
+.login-form > * {
+    font-size: 30px;
+}
+
+.form-button {
+    display: block;
+    margin-top: 3px;
+}

@@ -82,7 +82,7 @@ var ApplicableSlot = React.createClass({
         var slot = this.props.slot;
         var term = slot.term;
         return (
-            <div className='applicable_term'>
+            <div className='applicable-term'>
                 <b>Slot {slot.id}</b>
                 <a onClick={this.handleClick}>
                     <Term code={term}/>
